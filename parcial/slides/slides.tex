@@ -77,20 +77,54 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Outras possibilidades}
+\begin{frame}[fragile]
+  \frametitle{Lógica}
 
-  \begin{itemize}
-    \item<1-> Relacionar Gene-Proteína-Doença (gene codifica proteína que causa doença).
-    \begin{itemize}
-      \item Permite usar fontes de dados que correlacionam proteínas com doenças.
-    \end{itemize}
-    \item<2-> Interações diretas entre droga e doença (interação de tratamento).
-    \begin{itemize}
-      \item Poderíamos dizer: droga A previne doença \textalpha, porém
-            aumenta as chances de doença \textgamma.
-    \end{itemize}
-  \end{itemize}
+  A relação de droga-doença ocorre de modo intuitivo a partir das relações de
+  doença e droga com o gene.
+
+  \vspace*{0.1cm}
+
+  \begin{tabular}{| c c | c c |}
+    \hline
+    & & \multicolumn{2}{c|}{Droga-Gene} \\
+    & & ativação & inibição \\
+    \hline
+    Gene-Doença & ativação & ativação & inibição \\
+    & inibição & inibição & ativação \\
+    \hline
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo (protótipo)}
+
+  \begin{alltt}
+    Drug(\textcolor{blue}{\underline{DrugId}}, Name, Class)
+    DrugAlias(\underline{DrugAlias}, \textcolor{blue}{DrugId})
+
+    Disease(\textcolor{red}{\underline{DiseaseId}}, Name)
+    DiseaseAlias(\underline{DiseaseAlias}, \textcolor{red}{DiseaseId})
+  \end{alltt}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo (protótipo)}
+
+  \begin{alltt}
+    Interaction(\textcolor{teal}{\underline{InteractionId}},
+    |           \textcolor{blue}{DrugId},
+    |           \textcolor{red}{DiseaseId},
+    |           InteractionType)
+    InteractionSrc(\textcolor{teal}{InteractionId},
+    |              TrustLevel,
+    |              Gene,
+    |              GeneDrugInteraction,
+    |              GeneDrugInteractionMechanism,
+    |              DrugDiseaseInteraction,
+    |              Source)
+  \end{alltt}
 \end{frame}
 
 \begin{frame}
@@ -111,26 +145,20 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-  \frametitle{Modelo (protótipo)}
+\begin{frame}
+  \frametitle{Outras possibilidades}
 
-  \begin{alltt}
-    Drug(\textcolor{blue}{\underline{DrugId}}, Name, Class)
-    DrugAlias(\underline{DrugAlias}, \textcolor{blue}{DrugId})
-
-    Disease(\textcolor{red}{\underline{DiseaseId}}, Name)
-    DiseaseAlias(\underline{DiseaseAlias}, \textcolor{red}{DiseaseId})
-
-    Interaction(\textcolor{teal}{\underline{InteractionId}},
-    |           \textcolor{blue}{DrugId},
-    |           \textcolor{red}{DiseaseId},
-    |           InteractionType)
-    InteractionSrc(\textcolor{teal}{InteractionId},
-    |              TrustLevel,
-    |              Gene,
-    |              GeneInteractionMechanism,
-    |              Source)
-  \end{alltt}
+  \begin{itemize}
+    \item<1-> Relacionar Gene-Proteína-Doença (gene codifica proteína que causa doença).
+    \begin{itemize}
+      \item Permite usar fontes de dados que correlacionam proteínas com doenças.
+    \end{itemize}
+    \item<2-> Interações diretas entre droga e doença (interação de tratamento).
+    \begin{itemize}
+      \item Poderíamos dizer: droga A previne doença \textalpha, porém
+            aumenta as chances de doença \textgamma.
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
