@@ -1,4 +1,4 @@
-# Projeto `<Título do Projeto>`
+# Projeto `Interações entre Droga e Doença por meio de Genes`
 
 # Equipe `Terror do SQL` - `TERR`
 * `Mateus Siqueira Batista` - `241599`
