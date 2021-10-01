@@ -2,6 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
+\usepackage{textgreek}
 
 \usetheme{Antibes}
 \usecolortheme{default}
@@ -10,12 +11,12 @@
 \usepackage{tikz}
 \usepackage{lipsum}
 
-%\hypersetup {
-%  pdftitle = {?},
-%  pdfauthor = {?},
-%  pdfsubject = {?},
-%  pdfkeywords = {?}
-%}
+% \hypersetup {
+%   pdftitle = {?},
+%   pdfauthor = {?},
+%   pdfsubject = {?},
+%   pdfkeywords = {?}
+% }
 
 \setbeamertemplate{headline}{}
 \setbeamertemplate{navigation symbols}{}
@@ -35,19 +36,20 @@
 \frame{\titlepage}
 
 \begin{frame}
-  \frametitle{123}
-  \begin{itemize}
-    \item <1->\alert<1>{1}
-    \item <2->\alert<2>{2}
-    \item <3->\alert<3>{3}
-    \item <4->\alert<4>{4}
-    \item <5->\alert<5>{5}
-  \end{itemize}
-\end{frame}
+  \frametitle{Proposta}
+  Obter dados de interações entre genes e drogas, e entre genes e doenças.
+  \pause
 
-\begin{frame}
-  \frametitle{123}
-  \lipsum[1]
+  Através disso, podemos relacionar a interação entre estas drogas e as doenças.
+  \pause
+  
+  Por exemplo:
+  \begin{itemize}
+    \item Droga A ativa o gene X.
+    \item Gene X codifica a proteína X.
+    \item Proteína X tem relação de causa com as doenças \textalpha, \textgamma.
+    \item Portanto, a droga A tem relação de causa com as doenças \textalpha, \textgamma.
+  \end{itemize}
 \end{frame}
 
 \end{document}
