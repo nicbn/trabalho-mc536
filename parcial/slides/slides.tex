@@ -9,6 +9,7 @@
 \usecolortheme{default}
 
 \usepackage{amssymb,amsmath}
+\usepackage{textgreek}
 \usepackage{tikz}
 \usepackage{lipsum}
 
@@ -36,7 +37,22 @@
 
 \frame{\titlepage}
 
+\begin{frame}
+  \frametitle{Proposta}
+  Obter dados de interações entre genes e drogas, e entre genes e doenças.
+  \pause
 
+  Através disso, podemos relacionar a interação entre estas drogas e as doenças.
+  \pause
+  
+  Por exemplo:
+  \begin{itemize}
+    \item Droga A ativa o gene X.
+    \item Gene X codifica a proteína X.
+    \item Proteína X tem relação de causa com as doenças \textalpha, \textgamma.
+    \item Portanto, a droga A tem relação de causa com as doenças \textalpha, \textgamma.
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{DGIdb}
@@ -51,9 +67,7 @@
   \frametitle{DisGeNet}
   \includegraphics[scale=0.425]{disgenet.png}
   \begin{itemize}
-    \item {Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas
-    .}
-    \item {Extraído de mais de trinta fontes confiáveis.}
+    \item {Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas.}
   \end{itemize}
 \end{frame} 
 
