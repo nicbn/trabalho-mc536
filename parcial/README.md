@@ -6,7 +6,9 @@
 
 ## Resumo do Projeto
 
-> Texto resumindo o projeto.
+Coleta de dados de diversas fontes sobre interações entre droga e gene, e entre
+gene e doença, para relação entre droga e doença. Incluindo tratamento dos
+níveis de confiabilidade.
 
 ## Slides da Apresentação
 
