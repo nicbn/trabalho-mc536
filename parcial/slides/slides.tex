@@ -2,7 +2,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
+\usepackage{graphicx}
 
+\graphicspath{ {./../images/} }
 \usetheme{Antibes}
 \usecolortheme{default}
 
@@ -26,7 +28,7 @@
   Nicolas Bissoli Nattis
 }
 \institute{
-  Instituto de Computação, UNICAMP
+  MC536 - Instituto de Computação, UNICAMP
 }
 \date[2020]{2020}
 
@@ -34,20 +36,24 @@
 
 \frame{\titlepage}
 
-\begin{frame}
-  \frametitle{123}
-  \begin{itemize}
-    \item <1->\alert<1>{1}
-    \item <2->\alert<2>{2}
-    \item <3->\alert<3>{3}
-    \item <4->\alert<4>{4}
-    \item <5->\alert<5>{5}
-  \end{itemize}
-\end{frame}
+
 
 \begin{frame}
-  \frametitle{123}
-  \lipsum[1]
-\end{frame}
+  \frametitle{DGIdb}
+  \includegraphics[scale=0.8]{dgi.png}
+  \begin{itemize}
+    \item {Dados sobre interações droga-gene e o genoma drogável.}
+    \item {Extraído de mais de trinta fontes confiáveis.}
+  \end{itemize}
+\end{frame} 
+\begin{frame}
+  \frametitle{DisGeNet}
+  \includegraphics[scale=0.425]{disgenet.png}
+  \begin{itemize}
+    \item {Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas
+    .}
+    \item {Extraído de mais de trinta fontes confiáveis.}
+  \end{itemize}
+\end{frame} 
 
 \end{document}
