@@ -46,12 +46,13 @@
   Através disso, podemos relacionar a interação entre estas drogas e as doenças.
   \pause
 
-  Por exemplo:
-  \begin{itemize}
-    \item Droga A ativa o gene X.
-    \item Gene X tem relação de causa com as doenças \textalpha, \textgamma.
-    \item Portanto, a droga A tem relação de causa com as doenças \textalpha, \textgamma.
-  \end{itemize}
+  \begin{block}{Exemplo:}
+    \begin{itemize}
+      \item Droga A ativa o gene X.
+      \item Gene X tem relação de causa com as doenças \textalpha, \textgamma.
+      \item Portanto, a droga A tem relação de causa com as doenças \textalpha, \textgamma.
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
@@ -80,15 +81,15 @@
   \frametitle{Outras possibilidades}
 
   \begin{itemize}
-    \item Relacionar Gene-Proteína-Doença (gene codifica proteína que causa doença).
-          \begin{itemize}
-            \item Permite usar fontes de dados que correlacionam proteínas com doenças.
-          \end{itemize}
-    \item Interações diretas entre droga e doença (interação de tratamento).
-          \begin{itemize}
-            \item Poderíamos dizer: droga A previne doença \textalpha, porém
-                  aumenta as chances de doença \textgamma.
-          \end{itemize}
+    \item<1-> Relacionar Gene-Proteína-Doença (gene codifica proteína que causa doença).
+    \begin{itemize}
+      \item Permite usar fontes de dados que correlacionam proteínas com doenças.
+    \end{itemize}
+    \item<2-> Interações diretas entre droga e doença (interação de tratamento).
+    \begin{itemize}
+      \item Poderíamos dizer: droga A previne doença \textalpha, porém
+            aumenta as chances de doença \textgamma.
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -105,7 +106,7 @@
     \item Confibialidade
           \begin{itemize}
             \item Os dados coletados possuem níveis de confiabilidade
-            variáveis, que devem ser levados em conta.
+                  variáveis, que devem ser levados em conta.
           \end{itemize}
   \end{itemize}
 \end{frame}
@@ -121,15 +122,19 @@
     DiseaseAlias(\underline{DiseaseAlias}, \textcolor{red}{DiseaseId})
 
     Interaction(\textcolor{teal}{\underline{InteractionId}},
-                \textcolor{blue}{DrugId},
-                \textcolor{red}{DiseaseId},
-                InteractionType)
+    |           \textcolor{blue}{DrugId},
+    |           \textcolor{red}{DiseaseId},
+    |           InteractionType)
     InteractionSrc(\textcolor{teal}{InteractionId},
-                   TrustLevel,
-                   Gene,
-                   GeneInteractionMechanism,
-                   Source)
+    |              TrustLevel,
+    |              Gene,
+    |              GeneInteractionMechanism,
+    |              Source)
   \end{alltt}
+\end{frame}
+
+\begin{frame}
+  \centering Obrigado pela atenção!
 \end{frame}
 
 \end{document}
