@@ -23,7 +23,7 @@ Modelo gerado pela transformação:
 
 * Qual grupo de drogas tem relação com a doença X?
 
-  * Explicação sucinta da análise que será feita no grafo para atender à pergunta. Deve ser indicado explicitamente em qual das modalidades a análise se encaixa: centralidade; vulnerabilidade; comunidade/modularidade; motifs; predição de links.
+  * Selecionamos apenas a doença X e as drogas e suas classes relacianadas com X. A partir disso, utilizaremos Centralidade de Proximidade para identificar qual grupo de droga tem interação mais forte com a doença X (quais grupos de drogas está mais próximo de X).
 
 ### Pergunta/Análise 2
 
