@@ -15,7 +15,7 @@
 
 ## Modelo Conceitual Preliminar
 
-> ![ER Taxi](../lab08-projeto/images/model.png)
+![ER](images/conceitual.png)
 
 ## Modelos Lógicos Preliminares
 
