@@ -19,6 +19,8 @@
 
 ## Modelos Lógicos Preliminares
 
+### Relacional
+
 ~~~
     Drug(_DrugId_, Name, Class)
 
