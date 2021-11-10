@@ -15,7 +15,6 @@
 
 ## Modelo Conceitual Preliminar
 
-> Coloque aqui a imagem do modelo conceitual preliminar em ER ou UML, como o exemplo a seguir:
 > ![ER Taxi](../lab08-projeto/images/model.png)
 
 ## Modelos Lógicos Preliminares
@@ -24,9 +23,26 @@
 
 > Exemplo de modelo lógico relacional
 ~~~
-PESSOA(_Código_, Nome, Telefone)
-ARMÁRIO(_Código_, Tamanho, Ocupante)
-  Ocupante chave estrangeira -> PESSOA(Código)
+
+    Drug(_DrugId_, Name, Class)
+
+    DrugAlias(_DrugAlias_, _DrugId_)
+    Disease(_DiseaseId_, Name)
+    DiseaseAlias(_DiseaseAlias_, _DiseaseId_)
+
+    Interaction(_InteractionId_,
+                _DrugId_,
+                DiseaseId,
+                InteractionType)
+                
+    InteractionSrc(InteractionId,
+                    TrustLevel,
+                    Gene,
+                    GeneDrugInteraction,
+                    GeneDrugInteractionMechanism,
+                    DrugDiseaseInteraction,
+                    Source)
+
 ~~~
 
 > Para o modelo de grafos de propriedades, utilize este
