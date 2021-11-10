@@ -8,4 +8,5 @@
 # Etapas
 
 * [Entrega Parcial](parcial/)
-* [Entrega Final](final/)
+* [Laboratório 8 + Projeto](lab08-projeto/)
+* [Entrega Prévia](previa/)
