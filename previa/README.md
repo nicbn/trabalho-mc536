@@ -23,11 +23,12 @@
 
 > Exemplo de modelo lógico relacional
 ~~~
-
     Drug(_DrugId_, Name, Class)
 
     DrugAlias(_DrugAlias_, _DrugId_)
-    Disease(_DiseaseId_, Name)
+
+    Disease(_DiseaseId_, Name, Class)
+
     DiseaseAlias(_DiseaseAlias_, _DiseaseId_)
 
     Interaction(_InteractionId_,
@@ -42,7 +43,6 @@
                     GeneDrugInteractionMechanism,
                     DrugDiseaseInteraction,
                     Source)
-
 ~~~
 
 > Para o modelo de grafos de propriedades, utilize este
