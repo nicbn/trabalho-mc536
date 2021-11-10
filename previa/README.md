@@ -19,9 +19,6 @@
 
 ## Modelos Lógicos Preliminares
 
-> Coloque aqui os primeiros modelos lógicos dos bancos de dados relacionados aos modelos conceituais. Para o modelo relacional, sugere-se o formato a seguir. Para outros modelos lógicos o formato é livre, pode ser adotado aqueles apresentados em sala.
-
-> Exemplo de modelo lógico relacional
 ~~~
     Drug(_DrugId_, Name, Class)
 
@@ -32,7 +29,7 @@
     DiseaseAlias(_DiseaseAlias_, _DiseaseId_)
 
     Interaction(_InteractionId_,
-                _DrugId_,
+                DrugId,
                 DiseaseId,
                 InteractionType)
                 
@@ -41,7 +38,7 @@
                     Gene,
                     GeneDrugInteraction,
                     GeneDrugInteractionMechanism,
-                    DrugDiseaseInteraction,
+                    GeneDiseaseInteraction,
                     Source)
 ~~~
 
