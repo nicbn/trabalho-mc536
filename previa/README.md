@@ -16,7 +16,7 @@
 ## Modelo Conceitual Preliminar
 
 > Coloque aqui a imagem do modelo conceitual preliminar em ER ou UML, como o exemplo a seguir:
-> ![ER Taxi](images/er-taxi.png)
+> ![ER Taxi](../lab08-projeto/images/model.png)
 
 ## Modelos Lógicos Preliminares
 
