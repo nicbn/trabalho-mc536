@@ -1,13 +1,15 @@
 import pandas as pd
 
 dgidb_interactions = pd.read_csv(
-    '../data/dgidb/interactions.tsv',
+    '../data/external/dgidb/interactions.tsv.gz',
     sep = '\t',
+    compression = 'gzip',
     encoding = 'utf-8')
 
 disgenet_interactions = pd.read_csv(
-    '../data/disgenet/all_gene_disease_associations.tsv',
+    '../data/external/disgenet/all_gene_disease_associations.tsv.gz',
     sep = '\t',
+    compression = 'gzip',
     encoding = 'utf-8'
 )
 
