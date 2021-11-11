@@ -108,6 +108,8 @@ título da base | link | breve descrição
 * tratamento de dados
 * transformação de dados para facilitar análise e pesquisa
 
+> ![Notebook](src/build.py)
+
 > Se for notebook, ele estará dentro da pasta `notebook`. Se por alguma razão o código não for executável no Jupyter, coloque na pasta `src`. Se as operações envolverem queries executadas atraves de uma interface de um SGBD não executável no Jupyter, como o Cypher, apresente na forma de markdown.
 
 ## Perguntas de Pesquisa/Análise Combinadas e Respectivas Análises
