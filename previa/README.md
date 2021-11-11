@@ -23,39 +23,28 @@
 
 ~~~
 Drug(
+    _Id_,
     _Name_,
-    Class,
-)
-
-DrugAlias(
-    _Alias_,
-    DrugName,
 )
 
 Disease(
+    _Id_,
     _Name_,
     Class,
-)
-
-DiseaseAlias(
-    _Alias_,
-    DiseaseName,
 )
 
 Interaction(
     _InteractionId_,
-    DrugName,
-    DiseaseName,
+    DrugId,
+    DiseaseId,
     Score,
     Gene,
     Type,
 )
             
-Source(
-    InteractionId,
-    Kind,
+Evidence(
+    Pmid,
     Score,
-    Source,
 )
 ~~~
 

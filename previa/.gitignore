@@ -1,2 +1,4 @@
+**/.~*
+**/__pycache__
 data/external/dgidb/interactions.tsv
-data/external/disgenet/all_gene_disease_associations.tsv
+data/external/disgenet/all_gene_disease_pmid_associations.tsv
