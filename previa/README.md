@@ -22,26 +22,41 @@
 ### Relacional
 
 ~~~
-    Drug(_DrugId_, Name, Class)
+Drug(
+    _Name_,
+    Class,
+)
 
-    DrugAlias(_DrugAlias_, _DrugId_)
+DrugAlias(
+    _Alias_,
+    DrugName,
+)
 
-    Disease(_DiseaseId_, Name, Class)
+Disease(
+    _Name_,
+    Class,
+)
 
-    DiseaseAlias(_DiseaseAlias_, _DiseaseId_)
+DiseaseAlias(
+    _Alias_,
+    DiseaseName,
+)
 
-    Interaction(_InteractionId_,
-                DrugId,
-                DiseaseId,
-                InteractionType)
-                
-    InteractionSrc(InteractionId,
-                    TrustLevel,
-                    Gene,
-                    GeneDrugInteraction,
-                    GeneDrugInteractionMechanism,
-                    GeneDiseaseInteraction,
-                    Source)
+Interaction(
+    _InteractionId_,
+    DrugName,
+    DiseaseName,
+    Score,
+    Gene,
+    Type,
+)
+            
+Source(
+    InteractionId,
+    Kind,
+    Score,
+    Source,
+)
 ~~~
 
 > Para o modelo de grafos de propriedades, utilize este
