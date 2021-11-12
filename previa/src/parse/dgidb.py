@@ -1,23 +1,21 @@
+from collections import defaultdict
+import csv
 from typing import Dict, List
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 
 class DrugGeneInteraction:
-    def __init__(self, drug: str, drug_name: str, ty: int, score: float, pmids: List[str]):
+    def __init__(self, drug: str, ty: int, score: float, pmids: List[str]):
         self.drug = drug
-        self.drug_name = drug_name
         self.ty = ty
         self.pmids = pmids
         self.score = score
 
-    def __repr__(self):
-        return str({
-            'drug': self.drug_name,
-            'ty': self.ty,
-            'pmids': self.pmids,
-            'score': self.score
-        })
+
+class Dgidb:
+    interactions: Dict[str, List[DrugGeneInteraction]] = defaultdict(list)
+    drug_names: Dict[str, str] = {}
 
 
 dgidb_interaction_types = {
@@ -43,8 +41,8 @@ dgidb_interaction_types = {
 }
 
 
-def parse() -> Dict[str, List[DrugGeneInteraction]]:
-    # Indexado por gene
+def parse() -> Dgidb:
+    r = Dgidb()
 
     dgidb = pd.read_csv(
         '../data/external/dgidb/interactions.tsv',
@@ -54,8 +52,6 @@ def parse() -> Dict[str, List[DrugGeneInteraction]]:
     scaler = MinMaxScaler()
     dgidb[['interaction_group_score']] = scaler.fit_transform(
         dgidb[['interaction_group_score']])
-
-    r = {}
 
     for _, row in dgidb.iterrows():
         drug = row['drug_concept_id']
@@ -78,13 +74,8 @@ def parse() -> Dict[str, List[DrugGeneInteraction]]:
                 pass
         if ty == None:
             continue
+        r.drug_names[drug] = drug_name
+        r.interactions[gene].append(
+            DrugGeneInteraction(drug, ty, score, pmids))
 
-        arr = []
-        try:
-            arr = r[gene]
-        except KeyError:
-            r[gene] = arr
-
-        arr.append(DrugGeneInteraction(drug, drug_name, ty, score, pmids))
-    
     return r

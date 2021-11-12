@@ -1,5 +1,6 @@
-import pandas as pd
 from typing import Dict, List
+from collections import defaultdict
+import csv
 
 
 class Evidence:
@@ -9,71 +10,62 @@ class Evidence:
 
 
 class DisGeneInteraction:
-    evidences: List[Evidence] = []
-
-    def __init__(
-            self,
-            dis: str,
-            dis_name: str,
-            dis_class: List[str],
-            ty: int):
+    def __init__(self, dis: str, evidences: List[Evidence], ty: int):
+        self.evidences = evidences
         self.dis = dis
-        self.dis_name = dis_name
-        self.dis_class = dis_class
         self.ty = ty
 
 
-def parse(genes: List[str], limit = None) -> Dict[str, List[DisGeneInteraction]]:
-    # Indexado por gene
+class Dis:
+    def __init__(self, name: str, c: List[str]):
+        self.name = name
+        self.classes = c
 
-    print('Loading file', flush=True, end='')
-    disgenet = pd.read_csv(
-        '../data/external/disgenet/all_gene_disease_pmid_associations.tsv.gz',
-        sep='\t',
-        compression='gzip',
-        encoding='utf-8')
-    disgenet = disgenet.dropna()
-    disgenet = disgenet[disgenet['geneSymbol'].isin(genes)]
 
-    r: Dict[str, List[DisGeneInteraction]] = {}
-    total = len(disgenet)
+class Disgenet:
+    interactions: Dict[str, List[DisGeneInteraction]] = defaultdict(list)
+    dis: Dict[str, Dis] = {}
 
-    last_pair = ('', '')
-    last_interaction = None
 
-    for number, (_, row) in enumerate(disgenet.iterrows()):
-        if limit and number >= limit:
-            break
+def parse() -> Disgenet:
+    r = Disgenet()
 
-        if number % 100 == 0 or number + 1 == total:
-            print(f'\r{((number + 1) * 100 // total):d}% ({number + 1}/{total})', end='')
+    classes = defaultdict(list)
+    with open('../data/interim/disgenet/classes.tsv', 'r') as f:
+        for row in csv.DictReader(f, delimiter='\t'):
+            classes[row['DiseaseId']].append(row['Class'])
 
-        gene = row['geneSymbol']
-        dis_id = row['diseaseId']
-        score = row['score']
-        pmid = row['pmid']
+    names = {}
+    with open('../data/interim/disgenet/diseases.tsv', 'r') as f:
+        for row in csv.DictReader(f, delimiter='\t'):
+            names[row['Id']] = row['Name']
 
-        if last_pair == (gene, dis_id):
-            last_interaction.evidences.append(Evidence(pmid, score))
-            continue
+    for dis in classes.keys():
+        r.dis[dis] = Dis(names[dis], classes[dis])
 
-        dis_n = row['diseaseName']
-        dis_c = row['diseaseClass']
+    ty: Dict[(str, str), int] = {}
+    evidence: Dict[(str, str), List[Evidence]] = defaultdict(list)
 
-        arr = []
-        try:
-            arr = r[gene]
-        except KeyError:
-            r[gene] = arr
+    with open('../data/interim/disgenet/interactions.tsv', 'r') as f:
+        for row in csv.DictReader(f, delimiter='\t'):
+            gene = row['Gene']
+            dis_id = row['DiseaseId']
+            score = row['Score']
+            pmid = row['PMID']
+            this_ty = 1
+            if row['Type'] == 'Therapeutic':
+                this_ty = 0
 
-        interaction = DisGeneInteraction(dis_id, dis_n, str(dis_c).split(','))
-        interaction.evidences.append(Evidence(pmid, score))
+            if (dis_id, gene) not in ty:
+                ty[(dis_id, gene)] = this_ty
+            elif this_ty != ty[(dis_id, gene)]:
+                ty[(dis_id, gene)] = None
 
-        arr.append(interaction)
+            evidence[(dis_id, gene)].append(Evidence(pmid, float(score)))
 
-        last_pair = (gene, dis_id)
-        last_interaction = interaction
-
-    print('\r')
+    for (dis_id, gene), this_ty in ty.items():
+        if this_ty != None:
+            r.interactions[gene].append(DisGeneInteraction(
+                dis_id, evidence[(dis_id, gene)], this_ty))
 
     return r

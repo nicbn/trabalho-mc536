@@ -16,4 +16,4 @@ Executar `disgenet2tsv` na pasta `src`.
 
 Necessita que `interim/disgenet` exista.
 
-Executar `build` na pasta `src`.
+Executar `process` na pasta `src`.
