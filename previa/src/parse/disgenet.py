@@ -31,12 +31,12 @@ def parse() -> Disgenet:
     r = Disgenet()
 
     classes = defaultdict(list)
-    with open('../data/interim/disgenet/classes.tsv', 'r') as f:
+    with open('../data/external/disgenet/classes.tsv', 'r') as f:
         for row in csv.DictReader(f, delimiter='\t'):
             classes[row['DiseaseId']].append(row['Class'])
 
     names = {}
-    with open('../data/interim/disgenet/diseases.tsv', 'r') as f:
+    with open('../data/external/disgenet/diseases.tsv', 'r') as f:
         for row in csv.DictReader(f, delimiter='\t'):
             names[row['Id']] = row['Name']
 
@@ -46,7 +46,7 @@ def parse() -> Disgenet:
     ty: Dict[(str, str), int] = {}
     evidence: Dict[(str, str), List[Evidence]] = defaultdict(list)
 
-    with open('../data/interim/disgenet/interactions.tsv', 'r') as f:
+    with open('../data/external/disgenet/interactions.tsv', 'r') as f:
         for row in csv.DictReader(f, delimiter='\t'):
             gene = row['Gene']
             dis_id = row['DiseaseId']

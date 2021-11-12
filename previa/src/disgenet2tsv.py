@@ -4,17 +4,17 @@ from parse import dgidb
 import os
 
 try:
-    os.mkdir('../data/interim/disgenet')
+    os.mkdir('../data/external/disgenet')
 except FileExistsError:
     pass
 
 genes = list(dgidb.parse().keys())
 
-with sqlite3.connect('../data/external/disgenet.db') as conn:
+with sqlite3.connect('../data/raw/disgenet.db') as conn:
     diseases_id: Dict[int, str] = {}
 
     print('Generating diseases')
-    with open('../data/interim/disgenet/diseases.tsv', 'w') as f:
+    with open('../data/external/disgenet/diseases.tsv', 'w') as f:
         f.write('Id\tName\n')
         for nid, id, name in conn.execute(
                 'SELECT diseaseNID, diseaseId, diseaseName FROM diseaseAttributes'):
@@ -22,7 +22,7 @@ with sqlite3.connect('../data/external/disgenet.db') as conn:
             f.write(f'{id}\t{name}\n')
 
     print('Generating classes')
-    with open('../data/interim/disgenet/classes.tsv', 'w') as f:
+    with open('../data/external/disgenet/classes.tsv', 'w') as f:
         f.write('DiseaseId\tClass\n')
         for disease, c in conn.execute(
             'SELECT d2c.diseaseNID, dc.diseaseClass'
@@ -31,7 +31,7 @@ with sqlite3.connect('../data/external/disgenet.db') as conn:
             f.write(f'{diseases_id[disease]}\t{c}\n')
 
     print('Generating interactions')
-    with open('../data/interim/disgenet/interactions.tsv', 'w') as f:
+    with open('../data/external/disgenet/interactions.tsv', 'w') as f:
         f.write('DiseaseId\tGene\tScore\tPMID\tType\n')
         for (number, gene) in enumerate(genes):
             print(f'\r{(number + 1) * 100 // len(genes)} % ({number + 1} / {len(genes)})', end='')
