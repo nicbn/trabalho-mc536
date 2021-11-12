@@ -87,4 +87,5 @@ def parse() -> Dict[str, List[DrugGeneInteraction]]:
             r[gene] = arr
 
         arr.append(DrugGeneInteraction(drug, drug_name, ty, score, pmids))
+    
     return r
