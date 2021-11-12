@@ -168,14 +168,45 @@
 \begin{frame}
   \frametitle{Perguntas de Análise}
 
-  \begin{itemize}
-    \item Quais \textcolor{blue}{drogas} tem relação com a \textcolor{red}{doença} Y?
-          \vspace{10pt}
-    \item Quais classes de \textcolor{red}{doenças} estão mais relacionados com a \textcolor{blue}{droga} Y? 
-          \vspace{10pt}
-    \item Quais são as evidências da relação entre uma \textcolor{red}{doença} X e uma \textcolor{blue}{droga} Y?
-          
-  \end{itemize}
+  Quais \textcolor{blue}{drogas} tem relação com a \textcolor{red}{doença} Y?
+  \pause
+
+  \begin{alltt}\small
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+
+    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
+                  
+  \end{alltt}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+  Quais classes de \textcolor{red}{doenças} estão mais relacionados com a \textcolor{blue}{droga} Y? 
+  \pause
+  
+  \centering
+  \includegraphics[scale=0.2]{logicografo.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+  Quais são as evidências da relação entre uma \textcolor{red}{doença} X e uma \textcolor{blue}{droga} Y?
+  \pause
+
+  \begin{alltt}\small
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+
+    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
+               
+    Evidence(\textcolor{teal}{InteractionId}, Pmid, Score)
+                  
+  \end{alltt}
 \end{frame}
 
 \begin{frame}
