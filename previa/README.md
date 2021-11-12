@@ -43,6 +43,7 @@ Interaction(
 )
             
 Evidence(
+    _InteractionId_
     Pmid,
     Score,
 )
