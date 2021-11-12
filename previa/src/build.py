@@ -1,16 +1,15 @@
 import timeit
 import pandas as pd
-import parse_dgidb
-import parse_disgenet
+from parse import dgidb, disgenet
 from statistics import mean
 
 start = timeit.default_timer()
 
 print('Parsing DGIDB')
-drug_gene = parse_dgidb.parse()
+drug_gene = dgidb.parse()
 
 print('Parsing DISGENET')
-dis_gene = parse_disgenet.parse(drug_gene.keys(), 5000)
+dis_gene = disgenet.parse(drug_gene.keys(), 5000)
 
 drug_gene = {x: drug_gene[x] for x in dis_gene.keys()}
 
@@ -42,7 +41,6 @@ for (number, (g, dislist)) in enumerate(dis_gene.items()):
             # Create interaction
             interaction_id = len(interactions)
             disgenet_score = mean([x.score for x in dis.evidences])
-            type = dis.
             interactions.append([
                 interaction_id,
                 drug.drug,
@@ -57,4 +55,4 @@ for (number, (g, dislist)) in enumerate(dis_gene.items()):
 
 print()
 
-print(f'Completed in {timeit.default_timer() - start:.1f} s') 
+print(f'Completed in {timeit.default_timer() - start:.1f} s')
