@@ -6,7 +6,7 @@
 \usepackage{alltt}
 \usepackage{xcolor}
 
-\graphicspath{ {./../images/} }
+\graphicspath{ {./images/} }
 \usetheme{Antibes}
 \usecolortheme{default}
 
@@ -63,6 +63,7 @@
   \begin{itemize}
     \item Dados sobre interações droga-gene e o genoma drogável.
     \item Extraído de mais de trinta fontes confiáveis.
+    \item Dados extraídos via arquivo .tsv disponibiliszados.
   \end{itemize}
 \end{frame}
 
@@ -74,6 +75,7 @@
   \begin{itemize}
     \item Plataforma contendo uma das maiores coleções publicamente disponíveis
           de genes e variantes associados a doenças humanas.
+    \item Dados extraídos via banco de dados SQLite disponibilizado.
   \end{itemize}
 \end{frame}
 
@@ -98,65 +100,81 @@
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Modelo (protótipo)}
+  \frametitle{Tipos de Interação}
+
+  \centering
+  \includegraphics[scale=0.29]{diagram.png}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Conceitual}
+  \centering
+  \includegraphics[scale=0.275]{conceitual.png}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Lógico}
 
   \begin{alltt}
-    Drug(\textcolor{blue}{\underline{DrugId}},\underline{Name})
-
-    Disease(\textcolor{red}{\underline{Id}}, \underline{Name})
-    DiseaseAlias(\underline{DiseaseAlias}, \textcolor{red}{DiseaseId})
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+    
   \end{alltt}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Modelo (protótipo)}
+  \frametitle{Modelo Lógico}
 
   \begin{alltt}
-    Interaction(\textcolor{teal}{\underline{InteractionId}},
-    |           \textcolor{blue}{DrugId},
-    |           \textcolor{red}{DiseaseId},
-    |           InteractionType)
-    InteractionSrc(\textcolor{teal}{InteractionId},
-    |              TrustLevel,
-    |              Gene,
-    |              GeneDrugInteraction,
-    |              GeneDrugInteractionMechanism,
-    |              DrugDiseaseInteraction,
-    |              Source)
+    Interaction(\underline{InteractionId},
+                \textcolor{blue}{DrugId},
+                \textcolor{red}{DiseaseId},
+                Score,
+                Gene,
+                Type)
+               
+    Evidence(\textcolor{teal}{InteractionId},
+                Pmid,
+                Score)
+                  
   \end{alltt}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Modelo Lógico de Redes Complexas}
+  \centering
+  \includegraphics[scale=0.275]{logicografo.png}
+\end{frame}
+
 \begin{frame}
-  \frametitle{Possíveis dificuldades}
+  \frametitle{Tratamento de Dados e Preparo do Dataset}
 
   \begin{itemize}
     \item Quantidade muito grande de dados.
           \begin{itemize}
-            \item Precisamos coletar dados página por página.
-            \item Mais de 10 mil drogas e mais de 100 mil interações no DGIdb.
-            \item Coleta pode se tornar lenta.
+            \item Mais de 3,2 milhões de interações gene/doença no DisgeNet.
+            \item Coleta pode se tornou lenta e tivemos que buscar alternativas de otimização.
           \end{itemize}
     \item Confibialidade
           \begin{itemize}
             \item Os dados coletados possuem níveis de confiabilidade
-                  variáveis, que devem ser levados em conta.
+                  variáveis, que foram levados em conta e tranformados em um \underline{Score}.
+            \item Há um Score atrelado ao \textcolor{blue}{DgIdb} e outro ao \textcolor{red}{DisGeNET}. Assim, obtivemos um Score global da interação multiplicando um pelo outro.      
           \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Outras possibilidades}
+  \frametitle{Perguntas de Análise}
 
   \begin{itemize}
-    \item<1-> Relacionar Gene-Proteína-Doença (gene codifica proteína que causa doença).
-    \begin{itemize}
-      \item Permite usar fontes de dados que correlacionam proteínas com doenças.
-    \end{itemize}
-    \item<2-> Interações diretas entre droga e doença (interação de tratamento).
-    \begin{itemize}
-      \item Poderíamos dizer: droga A previne doença \textalpha, porém
-            aumenta as chances de doença \textgamma.
-    \end{itemize}
+    \item Quais \textcolor{blue}{drogas} tem relação com a \textcolor{red}{doença} Y?
+          \vspace{10pt}
+    \item Quais classes de \textcolor{red}{doenças} estão mais relacionados com a \textcolor{blue}{droga} Y? 
+          \vspace{10pt}
+    \item Quais são as evidências da relação entre uma \textcolor{red}{doença} X e uma \textcolor{blue}{droga} Y?
+          
   \end{itemize}
 \end{frame}
 

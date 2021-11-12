@@ -11,40 +11,4 @@ Este projeto tem como objetivo estudar a relação entre drogas e doenças. Tal 
 
 ## Slides da Apresentação
 
-![Slides](slides/Slides.pdf)
-
-## Modelo Conceitual Preliminar
-
-![ER](images/conceitual.png)
-
-## Modelos Lógicos Preliminares
-
-### Relacional
-
-~~~
-Drug(
-    _Id_,
-    _Name_,
-)
-
-Disease(
-    _Id_,
-    _Name_,
-    Class,
-)
-
-Interaction(
-    _InteractionId_,
-    DrugId,
-    DiseaseId,
-    Score,
-    Gene,
-    Type,
-)
-            
-Evidence(
-    InteractionId
-    Pmid,
-    Score,
-)
-~~~
+![Slides](slides/slides.pdf)
