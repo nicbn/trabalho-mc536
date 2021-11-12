@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 from typing import Dict
 from parse import dgidb
 import os
@@ -13,34 +12,31 @@ genes = list(dgidb.parse().keys())
 
 with sqlite3.connect('../data/external/disgenet.db') as conn:
     diseases_id: Dict[int, str] = {}
-    classes = pd.DataFrame(columns=['DiseaseId', 'Class'])
-    diseases = pd.DataFrame(columns=['Id', 'Name'])
 
     print('Generating diseases')
-    for nid, id, name in conn.execute(
-            'SELECT diseaseNID, diseaseId, diseaseName FROM diseaseAttributes'):
-        diseases_id[nid] = id
-        diseases.append([id, name])
+    with open('../data/interim/disgenet/diseases.tsv', 'w') as f:
+        f.write('Id\tName\n')
+        for nid, id, name in conn.execute(
+                'SELECT diseaseNID, diseaseId, diseaseName FROM diseaseAttributes'):
+            diseases_id[nid] = id
+            f.write(f'{id}\t{name}\n')
 
     print('Generating classes')
-    for disease, c in conn.execute(
-        'SELECT d2c.diseaseNID, dc.diseaseClass'
-        + ' FROM disease2class AS d2c, diseaseClass AS dc'
-            + ' WHERE d2c.diseaseClassNID = dc.diseaseClassNID'):
-        classes.append([diseases_id[disease], c])
-
-    interactions = pd.DataFrame(
-        columns=['DiseaseId', 'Gene', 'Score', 'PMID', 'Type'])
+    with open('../data/interim/disgenet/classes.tsv', 'w') as f:
+        f.write('DiseaseId\tClass\n')
+        for disease, c in conn.execute(
+            'SELECT d2c.diseaseNID, dc.diseaseClass'
+            + ' FROM disease2class AS d2c, diseaseClass AS dc'
+                + ' WHERE d2c.diseaseClassNID = dc.diseaseClassNID'):
+            f.write(f'{diseases_id[disease]}\t{c}\n')
 
     print('Generating interactions')
-    for gene in genes:
-        for disease, type, pmid, score in conn.execute(
-            'SELECT d.diseaseNID, d.associationType, d.pmid, d.score'
-                + ' FROM geneDiseaseNetwork AS d, geneAttributes as g'
-                + ' WHERE g.geneName = ? AND g.geneNID = d.geneNID', [gene]):
-            interactions.append(
-                [diseases_id[disease], gene, score, pmid, type])
-
-    classes.to_csv('../data/interim/disgenet/classes.tsv', sep='\t')
-    diseases.to_csv('../data/interim/disgenet/diseases.tsv', sep='\t')
-    interactions.to_csv('../data/interim/disgenet/interactions.tsv', sep='\t')
+    with open('../data/interim/disgenet/interactions.tsv', 'w') as f:
+        f.write('DiseaseId\tGene\tScore\tPMID\tType\n')
+        for (number, gene) in enumerate(genes):
+            print(f'\r{(number + 1) * 100 // len(genes)} % ({number + 1} / {len(genes)})', end='')
+            for disease, type, pmid, score in conn.execute(
+                'SELECT d.diseaseNID, d.associationType, d.pmid, d.score'
+                    + ' FROM geneDiseaseNetwork AS d, geneAttributes as g'
+                    + ' WHERE g.geneName = ? AND g.geneNID = d.geneNID', [gene]):
+                f.write(f'{diseases_id[disease]}\t{gene}\t{score}\t{pmid}\t{type}\n')
