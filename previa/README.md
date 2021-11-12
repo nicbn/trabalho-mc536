@@ -11,7 +11,7 @@
 
 ## Slides da Apresentação
 
-> ![Notebook](slides/Slides.pdf)
+> ![Slides](slides/Slides.pdf)
 
 ## Modelo Conceitual Preliminar
 
