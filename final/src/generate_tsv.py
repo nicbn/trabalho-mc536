@@ -4,6 +4,10 @@ from parse import dgidb, disgenet
 from statistics import mean
 import os
 
+def compress(path):
+    with gzip.open(f'{path}.gz', 'wb') as fout, open(path, 'rb') as fin:
+        fout.writelines(fin)
+
 try:
     os.mkdir('../data/processed/tsv')
 except FileExistsError:
@@ -21,20 +25,20 @@ dgidb_.interactions = {x: dgidb_.interactions[x]
                        for x in disgenet_.interactions.keys()}
 
 print('Generating drugs')
-with gzip.open('../data/processed/tsv/drugs.tsv.gz', 'wt') as f:
+with open('../data/processed/tsv/drugs.tsv', 'w') as f:
     f.write('Id\tName\n')
     for x_id, x in dgidb_.drug_names.items():
         f.write(f'{x_id}\t{x}\n')
 
 print('Generating diseases')
-with gzip.open('../data/processed/tsv/diseases.tsv.gz', 'wt') as f:
+with open('../data/processed/tsv/diseases.tsv', 'w') as f:
     f.write('Id\tName\tClass\n')
     for x_id, x in disgenet_.dis.items():
         f.write(f'{x_id}\t{x.name}\t{";".join(x.classes)}\n')
 
 print('Generating interactions, evidences')
-with gzip.open('../data/processed/tsv/interactions.tsv.gz', 'wt') as fi:
-    with gzip.open('../data/processed/tsv/evidences.tsv.gz', 'wt') as fe:
+with open('../data/processed/tsv/interactions.tsv', 'w') as fi:
+    with open('../data/processed/tsv/evidences.tsv', 'w') as fe:
         fi.write('Id\tDrugId\tDiseaseId\tScore\tGene\tType\n')
         fe.write('InteractionId\tPmid\tScore\n')
 
@@ -60,5 +64,11 @@ with gzip.open('../data/processed/tsv/interactions.tsv.gz', 'wt') as fi:
                     fi.write(f'{ii}\t{drugi.drug}\t{disi.dis}\t{score}\t{g}\t{type}\n')
 
                     ii += 1
+
+print('Compressing files')
+compress('../data/processed/tsv/drugs.tsv')
+compress('../data/processed/tsv/diseases.tsv')
+compress('../data/processed/tsv/interactions.tsv')
+compress('../data/processed/tsv/evidences.tsv')
 
 print(f'Completed in {timeit.default_timer() - start:.1f} s')

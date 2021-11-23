@@ -56,6 +56,9 @@ def parse() -> Disgenet:
             if row['Type'] == 'Therapeutic':
                 this_ty = 0
 
+            if pmid == 'None':
+                continue
+
             if (dis_id, gene) not in ty:
                 ty[(dis_id, gene)] = this_ty
             elif this_ty != ty[(dis_id, gene)]:

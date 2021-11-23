@@ -14,6 +14,16 @@ Executar `disgenet2tsv` na pasta `src`.
 
 ## Para gerar dados processados
 
+### TSV
+
 Necessita que `external/disgenet` exista.
 
 Executar `generate_tsv` na pasta `src`.
+
+### SQLite
+
+Necessita que os dados TSV existam.
+
+Executar `tsv2sqlite` na pasta `src`.
+
+O arquivo fica disponível em `data/processed/sqlite`.

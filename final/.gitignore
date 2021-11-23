@@ -1,4 +1,5 @@
 **/.~*
 **/__pycache__
 data/raw/disgenet.db
+data/processed/sqlite/*.db
 data/processed/tsv/*.tsv
