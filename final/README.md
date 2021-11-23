@@ -66,7 +66,7 @@ título do arquivo/base | link | breve descrição
 
 título da base | link | breve descrição
 ----- | ----- | -----
-`DgiDb` | [Link](https://www.dgidb.org/ )| `O DgiDb possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.
+`DgiDb` | [Link](https://www.dgidb.org/ )| `O DgiDb possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.`
 
 
 título da base | link | breve descrição
