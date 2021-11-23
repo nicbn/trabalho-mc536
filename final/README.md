@@ -11,7 +11,7 @@ Este projeto tem como objetivo estudar a relação entre drogas e doenças. Tal 
 
 ## Slides da Apresentação
 
-![Slides](slides/slides.pdf)
+[Slides](slides/slides.pdf)
 
 ## Modelo Conceitual
 
