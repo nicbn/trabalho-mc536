@@ -8,7 +8,7 @@
 
 ## Para gerar `external/disgenet`
 
-Fazer download do SQLite do DisGeNET e salvar em `data/raw/disgenet.db`.
+Fazer download do SQLite do DisGeNET ([aqui](https://www.disgenet.org/downloads)) e salvar em `data/raw/disgenet.db`.
 
 Executar `disgenet2tsv` na pasta `src`.
 
