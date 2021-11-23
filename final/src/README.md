@@ -16,4 +16,4 @@ Executar `disgenet2tsv` na pasta `src`.
 
 Necessita que `external/disgenet` exista.
 
-Executar `process` na pasta `src`.
+Executar `generate_tsv` na pasta `src`.
