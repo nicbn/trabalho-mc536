@@ -1,0 +1,216 @@
+\documentclass[12pt]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage{alltt}
+\usepackage{xcolor}
+
+\graphicspath{ {./images/} }
+\usetheme{Antibes}
+\usecolortheme{default}
+
+\usepackage{amssymb,amsmath}
+\usepackage{textgreek}
+\usepackage{tikz}
+
+%\hypersetup {
+%  pdftitle = {?},
+%  pdfauthor = {?},
+%  pdfsubject = {?},
+%  pdfkeywords = {?}
+%}
+
+\setbeamertemplate{headline}{}
+\setbeamertemplate{navigation symbols}{}
+
+\title{Interações entre Droga e Doença por meio de Genes}
+\author{
+  Mateus Siqueira Batista\and
+  Nicolas Bissoli Nattis
+}
+\institute{
+  MC536 - Instituto de Computação, UNICAMP
+}
+\date[2020]{2020}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+  \frametitle{Proposta}
+  Obter dados de interações entre genes e drogas, e entre genes e doenças.
+  \pause
+
+  Através disso, podemos relacionar a interação entre estas drogas e as doenças.
+  \pause
+
+  \begin{block}{Exemplo:}
+    \begin{itemize}
+      \item Droga A ativa o gene X.
+      \item Gene X tem relação de causa com as doenças \textalpha, \textgamma.
+      \item Portanto, a droga A tem relação de causa com as doenças \textalpha, \textgamma.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DGIdb}
+  \centering
+  \includegraphics[scale=0.5]{dgi}
+  \vspace*{1 cm}
+  \begin{itemize}
+    \item Dados sobre interações droga-gene e o genoma drogável.
+    \item Extraído de mais de trinta fontes confiáveis.
+    \item Dados extraídos via arquivo .tsv disponibiliszados.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DisGeNet}
+  \centering
+  \includegraphics[scale=0.25]{disgenet}
+  \vspace*{1 cm}
+  \begin{itemize}
+    \item Plataforma contendo uma das maiores coleções publicamente disponíveis
+          de genes e variantes associados a doenças humanas.
+    \item Dados extraídos via banco de dados SQLite disponibilizado.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Lógica}
+
+  A relação de droga-doença ocorre de modo intuitivo a partir das relações de
+  doença e droga com o gene.
+
+  \vspace*{0.1cm}
+
+  \begin{tabular}{| c c | c c |}
+    \hline
+    & & \multicolumn{2}{c|}{Droga-Gene} \\
+    & & ativação & inibição \\
+    \hline
+    Gene-Doença & ativação & ativação & inibição \\
+    & inibição & inibição & ativação \\
+    \hline
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Tipos de Interação}
+
+  \centering
+  \includegraphics[scale=0.29]{diagram.png}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Conceitual}
+  \centering
+  \includegraphics[scale=0.275]{conceitual.png}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Lógico}
+
+  \begin{alltt}
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+    
+  \end{alltt}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Lógico}
+
+  \begin{alltt}
+    Interaction(\underline{InteractionId},
+                \textcolor{blue}{DrugId},
+                \textcolor{red}{DiseaseId},
+                Score,
+                Gene,
+                Type)
+               
+    Evidence(\textcolor{teal}{InteractionId},
+                Pmid,
+                Score)
+                  
+  \end{alltt}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Modelo Lógico de Redes Complexas}
+  \centering
+  \includegraphics[scale=0.275]{logicografo.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tratamento de Dados e Preparo do Dataset}
+
+  \begin{itemize}
+    \item Quantidade muito grande de dados.
+          \begin{itemize}
+            \item Mais de 3,2 milhões de interações gene/doença no DisgeNet.
+            \item Coleta pode se tornou lenta e tivemos que buscar alternativas de otimização.
+          \end{itemize}
+    \item Confibialidade
+          \begin{itemize}
+            \item Os dados coletados possuem níveis de confiabilidade
+                  variáveis, que foram levados em conta e tranformados em um \underline{Score}.
+            \item Há um Score atrelado ao \textcolor{blue}{DgIdb} e outro ao \textcolor{red}{DisGeNET}. Assim, obtivemos um Score global da interação multiplicando um pelo outro.      
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+  Quais \textcolor{blue}{drogas} tem relação com a \textcolor{red}{doença} Y?
+  \pause
+
+  \begin{alltt}\small
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+
+    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
+                  
+  \end{alltt}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+  Quais classes de \textcolor{red}{doenças} estão mais relacionados com a \textcolor{blue}{droga} Y? 
+  \pause
+  
+  \centering
+  \includegraphics[scale=0.2]{logicografo.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+  Quais são as evidências da relação entre uma \textcolor{red}{doença} X e uma \textcolor{blue}{droga} Y?
+  \pause
+
+  \begin{alltt}\small
+    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
+    
+    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+
+    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
+               
+    Evidence(\textcolor{teal}{InteractionId}, Pmid, Score)
+                  
+  \end{alltt}
+\end{frame}
+
+\begin{frame}
+  \centering Obrigado pela atenção!
+\end{frame}
+
+\end{document}

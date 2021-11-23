@@ -10,3 +10,4 @@
 * [Entrega Parcial](parcial/)
 * [Laboratório 8 + Projeto](lab08-projeto/)
 * [Entrega Prévia](previa/)
+* [Entrega Final](final/)
