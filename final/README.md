@@ -66,13 +66,8 @@ título do arquivo/base | link | breve descrição
 
 título da base | link | breve descrição
 ----- | ----- | -----
-`DgiDb` | [Link](https://www.dgidb.org/ )| `O DgiDb possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.`
-
-
-título da base | link | breve descrição
------ | ----- | -----
 `DisgeNet` | [Link](https://www.disgenet.org/) | `Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas.`
------ | ----- | -----
+
 `DgiDb` | [Link](https://www.dgidb.org/ )| `O DgiDb possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.`
 ## Detalhamento do Projeto
 
