@@ -166,13 +166,13 @@ Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar um
 >|THIAMINE|Dystonia|1|0.333339201361383|
 >
 #### Pergunta/Análise 2
-> * Pergunta 2
+> * Quais grupos de drogas tem relação com a doença X?
 >   
 >   * Explicação sucinta da análise que será feita e conjunto de queries que
 >     responde à pergunta.
 
 #### Pergunta/Análise 3
-> * Pergunta 3
+> * Quais grupos de doença e de drogas estão mais relacionados entre si?
 >   
 >   * Explicação sucinta da análise que será feita e conjunto de queries que
 >     responde à pergunta.
@@ -180,7 +180,7 @@ Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar um
 ### Perguntas/Análise Propostas mas Não Implementadas
 
 #### Pergunta/Análise 1
-> * Pergunta 1
+> * Quais interações entre doença e droga são prováveis com base em interações registradas no banco de dados?
 >   
 >   * Explicação em linhas gerais de como a base pode ser usada para responder esta pergunta e a sua relevância.
 
