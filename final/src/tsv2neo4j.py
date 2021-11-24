@@ -31,10 +31,11 @@ inhibit: Dict[str, Dict[str, float]] = defaultdict(lambda : defaultdict(lambda :
 with gzip.open('../data/processed/tsv/interactions.tsv.gz', 'rt') as f:
     dict = csv.DictReader(f, delimiter='\t')
     for row in dict:
-        if row['Type'] != 1:
+        if row['Type'] != '1':
             inhibit[row['DiseaseId']][row['DrugId']] += float(row['Score'])
         else:
             activate[row['DiseaseId']][row['DrugId']] += float(row['Score'])
+
 
 with open('../data/processed/neo4j/edges.csv', 'w', newline='') as fout:
     out = csv.writer(fout)
@@ -46,7 +47,7 @@ with open('../data/processed/neo4j/edges.csv', 'w', newline='') as fout:
 
     for dis in activate:
         for drug in activate[dis]:
-            out.writerow([drug, dis, inhibit[dis][drug], 'activates'])
+            out.writerow([drug, dis, activate[dis][drug], 'activates'])
 
     for class_ in disease_classes:
         for dis in disease_classes[class_]:
