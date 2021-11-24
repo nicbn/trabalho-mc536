@@ -267,3 +267,16 @@ MATCH (dr:Drug)-[activates]->(di:Disease)-[belongs]->(c:Class) WHERE dr.name='HY
 ```
 
 ![resultado](slides/images/grafo1.png)
+
+#### Pergunta/Análise 4
+
+* É possível deduzir novas interações a partir das interações do dataset?
+
+   * Análise por predição de link.
+
+#### Pergunta/Análise 5
+
+* Podemos identificar tipos de drogas e doenças que interagem mais fortemente
+  entre si?
+
+    * Análise por comunidade/modularidade.
