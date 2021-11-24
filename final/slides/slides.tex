@@ -106,6 +106,8 @@
   \includegraphics[scale=0.29]{diagram.png}
 \end{frame}
 
+
+
 \begin{frame}[fragile]
   \frametitle{Modelo Conceitual}
   \centering
@@ -144,18 +146,35 @@
 \begin{frame}[fragile]
   \frametitle{Modelo Lógico de Redes Complexas}
   \centering
-  \includegraphics[scale=0.275]{logicografo.png}
+  \includegraphics[scale=0.275]{grafo.png}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Evolução do projeto}
+  
+  \begin{itemize}
+    \item Removemos classes de drogas e aliases (fora do escopo).
+    \item Dividimos as interações do Neo4j em duas.
+    \item Usamos SQLite e TSV ao invés de requisições HTTP (muito lento).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Transformação}
+
+  \begin{itemize}
+    \item Transformar DISGENET SQLite em TSV.
+    \item Ler TSV das fontes.
+    \item Produzir TSV final.
+    \item Transformar TSV final em SQLite.
+    \item Transformar TSV final em CSV para Neo4j.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Tratamento de Dados e Preparo do Dataset}
+  \frametitle{Tratamento de Dados}
 
   \begin{itemize}
-    \item Quantidade muito grande de dados.
-          \begin{itemize}
-            \item Mais de 3,2 milhões de interações gene/doença no DisgeNet.
-            \item Coleta pode se tornou lenta e tivemos que buscar alternativas de otimização.
-          \end{itemize}
     \item Confibialidade
           \begin{itemize}
             \item Os dados coletados possuem níveis de confiabilidade
@@ -168,45 +187,79 @@
 \begin{frame}
   \frametitle{Perguntas de Análise}
 
-  Quais \textcolor{blue}{drogas} tem relação com a \textcolor{red}{doença} Y?
-  \pause
+  Selecione o nome das drogas e doenças das N interações com maior pontuação.
 
+  \only<1>{
   \begin{alltt}\small
-    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
-    
-    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+SELECT Dr.Name, Di.Name, I.Type, I.Score
 
-    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
-                  
+FROM Interaction as I, Drug as Dr, Disease  as Di
+
+WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId
+
+ORDER BY I.Score DESC LIMIT 10;
   \end{alltt}
+  }
+
+  \only<2>{
+    \centering
+    \includegraphics[scale=0.5]{q1}
+  }
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Perguntas de Análise}
 
-  Quais classes de \textcolor{red}{doenças} estão mais relacionados com a \textcolor{blue}{droga} Y? 
-  \pause
+  Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449?
+
+  \only<1>{
+  \begin{alltt}\small
+SELECT Dr.Id, Dr.Name, I.Type, I.Score
+
+FROM INTERACTION as I, DRUG as Dr, Disease as Di
+
+WHERE Di.id ='C0023449' AND I.DiseaseId = Di.id
+
+ORDER BY I.Score DESC LIMIT 10;
+  \end{alltt}
+  }
+
+  \only<2>{
+    \centering
+    \includegraphics[scale=0.5]{q2}
+  }
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perguntas de Análise}
+
+Quais classes de doenças são mais ativadas pela HYDROMORPHONE?
+
+\only<1>{
   
-  \centering
-  \includegraphics[scale=0.2]{logicografo.png}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Perguntas de Análise}
-
-  Quais são as evidências da relação entre uma \textcolor{red}{doença} X e uma \textcolor{blue}{droga} Y?
-  \pause
+  \begin{itemize}
+    \item Uma análise aprofundada é necessária, mas podemos partir da
+          seguinte.
+  \end{itemize}
 
   \begin{alltt}\small
-    Drug(\textcolor{blue}{\underline{DrugId}}, \underline{Name})
-    
-    Disease(\textcolor{red}{\underline{DiseaseId}}, \underline{Name}, Class)
+MATCH (dr:Drug)-[activates]->(di:Disease)
 
-    Interaction(\underline{InteractionId}, \textcolor{blue}{DrugId}, \textcolor{red}{DiseaseId}, ...)
-               
-    Evidence(\textcolor{teal}{InteractionId}, Pmid, Score)
-                  
+-[belongs]->(c:Class)
+
+WHERE dr.name='HYDROMORPHONE'
+
+RETURN dr, activates, di, belongs, c
   \end{alltt}
+  }
+
+  \only<2>{
+    \centering
+    \includegraphics[scale=0.5]{grafo1}
+  }
+
 \end{frame}
 
 \begin{frame}

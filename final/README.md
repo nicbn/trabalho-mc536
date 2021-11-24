@@ -71,30 +71,99 @@ DGIDB | [Link](https://www.dgidb.org/ )| O DGIDB possui dados extraídos de mais
 
 ## Detalhamento do Projeto
 
-> Apresente aqui detalhes do processo de construção do dataset e análise. Nesta seção ou na seção de Perguntas podem aparecer destaques de código como indicado a seguir. Note que foi usada uma técnica de highlight de código, que envolve colocar o nome da linguagem na abertura de um trecho com `~~~`, tal como `~~~python`.
-> Os destaques de código devem ser trechos pequenos de poucas linhas, que estejam diretamente ligados a alguma explicação. Não utilize trechos extensos de código. Se algum código funcionar online (tal como um Jupyter Notebook), aqui pode haver links. No caso do Jupyter, preferencialmente para o Binder abrindo diretamente o notebook em questão.
+Primeiramente, transformamos o SQLite do Disgenet em dados tsv em
+[disgenet2tsv.py](src/disgenet2tsv.py).
 
+```python
+    # Importação das iterações
 
-~~~python
-df = pd.read_excel("/content/drive/My Drive/Colab Notebooks/dataset.xlsx");
-sns.set(color_codes=True);
-sns.distplot(df.Hemoglobin);
-plt.show();
-~~~
+    print('Generating interactions')
+    with open('../data/external/disgenet/interactions.tsv', 'w') as f:
+        f.write('DiseaseId\tGene\tScore\tPMID\tType\n')
+        for (number, gene) in enumerate(genes):
+            print(f'\r{(number + 1) * 100 // len(genes)} % ({number + 1} / {len(genes)})', end='')
+            for disease, type, pmid, score in conn.execute(
+                'SELECT d.diseaseNID, d.associationType, d.pmid, d.score'
+                    + ' FROM geneDiseaseNetwork AS d, geneAttributes as g'
+                    + ' WHERE g.geneName = ? AND g.geneNID = d.geneNID', [gene]):
+                f.write(f'{diseases_id[disease]}\t{gene}\t{score}\t{pmid}\t{type}\n')
+```
 
-> Se usar Orange para alguma análise, você pode apresentar uma captura do workflow, como o exemplo a seguir e descrevê-lo:
-![Workflow no Orange](images/orange-zombie-meals-prediction.png)
+Depois, usamos estes dados TSV com o TSV do DGIDB para gerar os dados TSV finais.
 
-> Coloque um link para o arquivo do notebook, programas ou workflows que executam as operações que você apresentar.
+```python
+# Parse de dados do DGIDB
 
-> Aqui devem ser apresentadas as operações de construção do dataset:
-* extração de dados de fontes não estruturadas como, por exemplo, páginas Web
-* agregação de dados fragmentados obtidos a partir de API
-* integração de dados de múltiplas fontes
-* tratamento de dados
-* transformação de dados para facilitar análise e pesquisa
+def parse() -> Dgidb:
+    r = Dgidb()
 
-> Se for notebook, ele estará dentro da pasta `notebook`. Se por alguma razão o código não for executável no Jupyter, coloque na pasta `src` (por exemplo, arquivos do Orange ou Cytoscape). Se as operações envolverem queries executadas atraves de uma interface de um SGBD não executável no Jupyter, como o Cypher, apresente na forma de markdown.
+    dgidb = pd.read_csv(
+        '../data/external/dgidb/interactions.tsv',
+        sep='\t',
+        encoding='utf-8')
+    dgidb = dgidb.dropna()
+    scaler = MinMaxScaler()
+    dgidb[['interaction_group_score']] = scaler.fit_transform(
+        dgidb[['interaction_group_score']])
+
+    for _, row in dgidb.iterrows():
+        drug = row['drug_concept_id']
+        gene = row['gene_name']
+        drug_name = row['drug_name']
+        pmids = str(row['PMIDs']).split(',')
+        score = row['interaction_group_score']
+
+        types = str(row['interaction_types']).split(',')
+        ty = None
+        for x in types:
+            try:
+                y = dgidb_interaction_types[x]
+                if ty == None or ty == y:
+                    ty = y
+                else:
+                    ty = None
+                    break
+            except KeyError:
+                pass
+        if ty == None:
+            continue
+        r.drug_names[drug] = drug_name
+        r.interactions[gene].append(
+            DrugGeneInteraction(drug, ty, score, pmids))
+
+    return r
+```
+
+Neste passo realizamos as operações para gerar o score.
+
+Para o DGIDB fazemos uma média dos scores, e então multiplicamos com o
+score total do Disgenet para cada tripla drug-gen-disease.
+
+Finalmente, transformamos os dados TSV em SQLite em [tsv2sqlite.py](src/tsv2sqite.py)
+ou CSV para o Neo4j em [tsv2neo4j.py](src/tsv2neo4j.py) para a publicação nos
+formatos.
+
+```python
+# Geração de nós
+
+print('Generating nodes.csv')
+with open('../data/processed/neo4j/nodes.csv', 'w', newline='') as fout:
+    out = csv.writer(fout)
+    out.writerow(['id:ID', 'name', ':LABEL'])
+
+    with gzip.open('../data/processed/tsv/drugs.tsv.gz', 'rt') as f:
+        dict = csv.DictReader(f, delimiter='\t')
+        out.writerows([[row['Id'], row['Name'], 'Drug'] for row in dict])
+
+    with gzip.open('../data/processed/tsv/diseases.tsv.gz', 'rt') as f:
+        dict = csv.DictReader(f, delimiter='\t')
+        for row in dict:
+            out.writerow([row['Id'], row['Name'], 'Disease'])
+            for class_ in row['Class'].split(';'):
+                disease_classes[class_].append(row['Id'])
+    
+    out.writerows([[x, x, 'Class'] for x in disease_classes])
+```
 
 ## Evolução do Projeto
 
@@ -164,29 +233,37 @@ Resultado:
 
 #### Pergunta/Análise 2
 
-* Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449 ?
+* Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449?
    
     * Vamos selecionar os 10 primeiros registros com a seguinte query:
 ```sql
-SELECT D.Id, D.Name  FROM INTERACTION as I, DRUG as D, Disease  as Di  WHERE Di.id ='C0023449'  LIMIT 10;
+SELECT Dr.Id, Dr.Name, I.Type, I.Score FROM INTERACTION as I, DRUG as Dr, Disease as Di WHERE Di.id ='C0023449' AND I.DiseaseId = Di.id ORDER BY I.Score DESC LIMIT 10;
 ```
    Resultado:
    
-| `Drug Id` | `Drug Name`  |
-|-----------|-----------|
-chembl:CHEMBL398707|HYDROMORPHONE
-chembl:CHEMBL3545253|FLORTAUCIPIR F 18
-chembl:CHEMBL2|PRAZOSIN
-chembl:CHEMBL1621597|IPRATROPIUM
-chembl:CHEMBL157101|KETOCONAZOLE
-chembl:CHEMBL1670|MITOTANE
-chembl:CHEMBL723|CARVEDILOL
-chembl:CHEMBL157138|LISURIDE
-chembl:CHEMBL2103830|FOSTAMATINIB
-chembl:CHEMBL1201250|BENZQUINAMIDE
+| `Dr.Id` | `Dr.Name` | `I.Type` | `I.Score` |
+|-----------|-----------|----------|-----------|
+chembl:CHEMBL398707|HYDROMORPHONE|0|0.0388903558959012
+chembl:CHEMBL3545253|FLORTAUCIPIR F 18|0|0.0388903558959012
+chembl:CHEMBL2|PRAZOSIN|0|0.0388903558959012
+chembl:CHEMBL1621597|IPRATROPIUM|0|0.0388903558959012
+chembl:CHEMBL157101|KETOCONAZOLE|0|0.0388903558959012
+chembl:CHEMBL1670|MITOTANE|0|0.0388903558959012
+chembl:CHEMBL723|CARVEDILOL|0|0.0388903558959012
+chembl:CHEMBL157138|LISURIDE|0|0.0388903558959012
+chembl:CHEMBL2103830|FOSTAMATINIB|0|0.0388903558959012
+chembl:CHEMBL1201250|BENZQUINAMIDE|0|0.0388903558959012
+
+### Perguntas/Análise com Resposta Não Implementada
 
 #### Pergunta/Análise 3
-* Quais Classes de Doenças estão mais relacionadas com a Droga Y?
 
-   * Explicação sucinta da análise que será feita e conjunto de queries que
-     responde à pergunta.
+* Quais classes de doenças são mais ativadas pela HYDROMORPHONE?
+
+   * Esta pergunta necessita de uma análise de grafo aprofundada. Podemos começar a partir da query no Neo4j.
+
+```
+MATCH (dr:Drug)-[activates]->(di:Disease)-[belongs]->(c:Class) WHERE dr.name='HYDROMORPHONE' RETURN dr, activates, di, belongs, c
+```
+
+![resultado](slides/images/grafo1.png)
