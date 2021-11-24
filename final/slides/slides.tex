@@ -41,10 +41,8 @@
 \begin{frame}
   \frametitle{Proposta}
   Obter dados de interações entre genes e drogas, e entre genes e doenças.
-  \pause
 
   Através disso, podemos relacionar a interação entre estas drogas e as doenças.
-  \pause
 
   \begin{block}{Exemplo:}
     \begin{itemize}
@@ -114,7 +112,7 @@
   \includegraphics[scale=0.275]{conceitual.png}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Modelo Lógico}
 
   \begin{alltt}
@@ -125,11 +123,11 @@
   \end{alltt}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Modelo Lógico}
 
   \begin{alltt}
-    Interaction(\underline{InteractionId},
+    Interaction(\underline{\textcolor{teal}{InteractionId}},
                 \textcolor{blue}{DrugId},
                 \textcolor{red}{DiseaseId},
                 Score,
@@ -143,13 +141,13 @@
   \end{alltt}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Modelo Lógico de Redes Complexas}
   \centering
   \includegraphics[scale=0.275]{grafo.png}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Evolução do projeto}
   
   \begin{itemize}
@@ -159,7 +157,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Transformação}
 
   \begin{itemize}
@@ -173,15 +171,36 @@
 
 \begin{frame}
   \frametitle{Tratamento de Dados}
-
+  
   \begin{itemize}
     \item Confibialidade
-          \begin{itemize}
-            \item Os dados coletados possuem níveis de confiabilidade
-                  variáveis, que foram levados em conta e tranformados em um \underline{Score}.
-            \item Há um Score atrelado ao \textcolor{blue}{DgIdb} e outro ao \textcolor{red}{DisGeNET}. Assim, obtivemos um Score global da interação multiplicando um pelo outro.      
-          \end{itemize}
+    \begin{itemize}
+      \item Os dados coletados possuem níveis de confiabilidade
+      variáveis, que foram levados em conta e tranformados em um \underline{Score}.
+      \item Há um Score atrelado ao \textcolor{blue}{DgIdb} e outro ao \textcolor{red}{DisGeNET}. Assim, obtivemos um Score global da interação multiplicando um pelo outro.      
+    \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destaques}
+
+  \centering
+  \includegraphics[scale=0.5]{c1}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destaques}
+
+  \centering
+  \includegraphics[scale=0.35]{c2}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destaques}
+
+  \centering
+  \includegraphics[scale=0.5]{c3}
 \end{frame}
 
 \begin{frame}
