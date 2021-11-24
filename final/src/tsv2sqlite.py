@@ -55,25 +55,26 @@ CREATE TABLE Evidence(
         dict = csv.DictReader(f, delimiter='\t')
         conn.executemany(
             'INSERT INTO Drug (Id, Name) VALUES (?, ?)',
-            [[row['Id'], row['Name']] for row in dict]
+            [(row['Id'], row['Name']) for row in dict]
         )
     with gzip.open('../data/processed/tsv/diseases.tsv.gz', 'rt') as f:
         dict = csv.DictReader(f, delimiter='\t')
         conn.executemany(
             'INSERT INTO Disease (Id, Name, Class) VALUES (?, ?, ?)',
-            [[row['Id'], row['Name'], row['Class']] for row in dict]
+            [(row['Id'], row['Name'], row['Class']) for row in dict]
         )
     with gzip.open('../data/processed/tsv/interactions.tsv.gz', 'rt') as f:
         dict = csv.DictReader(f, delimiter='\t')
         conn.executemany(
             'INSERT INTO Interaction (Id, DrugId, DiseaseId, Score, Gene, Type) VALUES (?, ?, ?, ?, ?, ?)',
-            [[row['Id'], row['DrugId'], row['DiseaseId'], row['Score'], row['Gene'], row['Type']] for row in dict]
+            [(row['Id'], row['DrugId'], row['DiseaseId'], row['Score'], row['Gene'], row['Type']) for row in dict]
         )
     with gzip.open('../data/processed/tsv/evidences.tsv.gz', 'rt') as f:
         dict = csv.DictReader(f, delimiter='\t')
         conn.executemany(
             'INSERT INTO Evidence (InteractionId, Pmid, Score) VALUES (?, ?, ?)',
-            [[row['InteractionId'], row['Pmid'], row['Score']] for row in dict]
+            [(row['InteractionId'], row['Pmid'], row['Score']) for row in dict]
         )
 
+print('Compressing')
 compress('../data/processed/sqlite/sqlite.db')
