@@ -112,21 +112,30 @@ Nesse sentido, os dados coletados possuem níveis de confiabilidade variáveis, 
 
 ## Perguntas de Pesquisa/Análise Combinadas e Respectivas Análises
 
-> Apresente os resultados da forma mais rica possível, com gráficos e tabelas. Mesmo que o seu código rode online em um notebook, copie para esta parte a figura estática. A referência a código e links para execução online pode ser feita aqui ou na seção de detalhamento do projeto (o que for mais pertinente).
-
-> Liste aqui as perguntas de pesquisa/análise e respectivas análises. Nem todas as perguntas precisam de queries que as implementam. É possível haver perguntas em que a solução é apenas descrita para demonstrar o potencial da base. Abaixo são ilustradas três perguntas, mas pode ser um número maior a critério da equipe.
->
 ### Perguntas/Análise com Resposta Implementada
 
-> As respostas às perguntas podem devem ser ilustradas da forma mais rica possível com tabelas resultantes, grafos ou gráficos que apresentam os resultados. Os resultados podem ser analisados e comentados. Veja um exemplo de figura ilustrando uma comunidade detectada no Cytoscape:
-
-> ![Comunidade no Cytoscape](images/cytoscape-comunidade.png)
-
 #### Pergunta/Análise 1
-> * Pergunta 1
->   
->   * Explicação sucinta da análise que será feita e conjunto de queries que
->     responde à pergunta.
+
+Selecione o nome das drogas e doenças das N interações com maior pontuação.
+
+* Usando o SQL com 10 interações:
+
+`SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;`
+
+Resultado:
+
+| `Dr.Name` | `Di.Name` | `I.Type` | `I.Score` |
+|-----------|-----------|----------|-----------|
+|NITISINONE|Tyrosinemia, Type III|0|0.861673561599624|
+|BUROSUMAB|Autosomal dominant hypophosphatemic rickets|0|0.833348003403456|
+|NITISINONE|Hawkinsinuria|0|0.669172021242262|
+|BUROSUMAB|Hypophosphatemic Rickets|0|0.416674001701728|
+|BUROSUMAB|TUMORAL CALCINOSIS, HYPERPHOSPHATEMIC, FAMILIAL|0|0.416674001701728|
+|NITISINONE|Tyrosinemias|0|0.40333656074876|
+|GOLODIRSEN|Muscular Dystrophy, Duchenne|1|0.388903558959012|
+|GLEMBATUMUMAB VEDOTIN|Malignant neoplasm of breast|1|0.386666666666667|
+|UROFOLLITROPIN|Ovarian Hyperstimulation Syndrome|1|0.346659625033008|
+|THIAMINE|Dystonia|1|0.333339201361383|
 
 #### Pergunta/Análise 2
 > * Pergunta 2
