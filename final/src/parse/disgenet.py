@@ -30,15 +30,17 @@ class Disgenet:
 def parse() -> Disgenet:
     r = Disgenet()
 
-    classes = defaultdict(list)
+    classes: Dict[str, List[str]] = {}
+    names = {}
+
+    with open('../data/external/disgenet/diseases.tsv', 'r') as f:
+        for row in csv.DictReader(f, delimiter='\t'):
+            classes[row['Id']] = []
+            names[row['Id']] = row['Name']
+
     with open('../data/external/disgenet/classes.tsv', 'r') as f:
         for row in csv.DictReader(f, delimiter='\t'):
             classes[row['DiseaseId']].append(row['Class'])
-
-    names = {}
-    with open('../data/external/disgenet/diseases.tsv', 'r') as f:
-        for row in csv.DictReader(f, delimiter='\t'):
-            names[row['Id']] = row['Name']
 
     for dis in classes.keys():
         r.dis[dis] = Dis(names[dis], classes[dis])
