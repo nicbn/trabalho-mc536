@@ -48,7 +48,10 @@ Evidence(
 )
 ~~~
 
-> ![Modelo Lógico de Grafos](slides/images/logicografo.png)
+
+### Grafo
+
+> ![Modelo Lógico de Grafos](slides/images/grafo.png)
 
 
 ## Dataset Publicado
@@ -166,13 +169,31 @@ Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar um
 >|THIAMINE|Dystonia|1|0.333339201361383|
 >
 #### Pergunta/Análise 2
-> * Quais grupos de drogas tem relação com a doença X?
+> * Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449 ?
 >   
->   * Explicação sucinta da análise que será feita e conjunto de queries que
->     responde à pergunta.
+>   * Vamos selecionar os 10 primeiros registros com a seguinte query:
+>```sql
+>SELECT D.Id, D.Name  FROM INTERACTION as I, DRUG as D, Disease  as Di  WHERE Di.id ='C0023449'  LIMIT 10;
+>```
+>   Resultado:
+>   
+>| `Drug Id` | `Drug Name`  |
+>|-----------|-----------|
+>chembl:CHEMBL398707|HYDROMORPHONE
+>chembl:CHEMBL3545253|FLORTAUCIPIR F 18
+>chembl:CHEMBL2|PRAZOSIN
+>chembl:CHEMBL1621597|IPRATROPIUM
+>chembl:CHEMBL157101|KETOCONAZOLE
+>chembl:CHEMBL1670|MITOTANE
+>chembl:CHEMBL723|CARVEDILOL
+>chembl:CHEMBL157138|LISURIDE
+>chembl:CHEMBL2103830|FOSTAMATINIB
+>chembl:CHEMBL1201250|BENZQUINAMIDE
+
+
 
 #### Pergunta/Análise 3
-> * Quais grupos de doença e de drogas estão mais relacionados entre si?
+> * Pergunta
 >   
 >   * Explicação sucinta da análise que será feita e conjunto de queries que
 >     responde à pergunta.
@@ -180,9 +201,9 @@ Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar um
 ### Perguntas/Análise Propostas mas Não Implementadas
 
 #### Pergunta/Análise 1
-> * Quais interações entre doença e droga são prováveis com base em interações registradas no banco de dados?
+> * Quais grupos de doença e de drogas estão mais relacionados entre si?
 >   
->   * Explicação em linhas gerais de como a base pode ser usada para responder esta pergunta e a sua relevância.
+>   * 
 
 #### Pergunta/Análise 2
 > * Pergunta 2
