@@ -98,47 +98,73 @@ plt.show();
 ## Evolução do Projeto
 
 Diante do desafio de encontrar a relação entre Drogas/Fármacos e Doenças, tivemos como principal desafio lidar com uma grande quantidade de dados;
-
 Nossa primeira tentaiva de extração de dados das fontes foi através das APIs disponibilizadas pelas plataformas. Todavia, tanto o DisgeNET como o DgiDb contam com uma quantidade muito grande de registros em seus bancos de dados. Desse modo, as requisições HTTP feitas nas APIs acabavam ficando muito lentas. Para resolver tal problema tivemos duas opções: utilizar metodos assíncronos no python para aumentar o numero de requisições sendo feitas ao mesmo tempo, ou baixar diretamente os dados das plataformas (tipos TSV ou SQLite). Optamos pela segunda opção, que para o DisgeNET só foi possível no formato SQLite, pois o arquivo .TSV disponibilizado para download carecia de alguns dados necessários, como o Score.
 
 Ademais, outro desafio encontrado foi a necessidade de classificar a confiabilidade de uma interação Droga/Doença;
-
 Nesse sentido, os dados coletados possuem níveis de confiabilidade variáveis, que foram levados em conta e tranformados em um Score. Todavia, nos dados (antes do processamento) havia um Score atrelado ao DgIdb (Score que qualificava a interação Droga/Gene) e outro ao DisGeNET (Score que qualificava a interação Doença/Gene). Assim, obtivemos um Score global da interação multiplicando um pelo outro.
 
+Alem disso, tivemos um problema relacionado aos tipos de interação Droga/Doença. No caso do DisgeNET, tinhamos 8 tipos de interação, e no caso do DgiDb tinhamos 18 tipos diferentes. Desse modo, precisamos classificar todas esses tipos de interação em apenas 2: ativação e inibição, como podemos ver na imagem abaixo.
 
-> Relatório de evolução, descrevendo as evoluções na modelagem do projeto, dificuldades enfrentadas, mudanças de rumo, melhorias e lições aprendidas. Referências aos diagramas, modelos e recortes de mudanças são bem-vindos.
-> Podem ser apresentados destaques na evolução dos modelos conceitual e lógico. O modelo inicial e intermediários (quando relevantes) e explicação de refinamentos, mudanças ou evolução do projeto que fundamentaram as decisões.
-> Relatar o processo para se alcançar os resultados é tão importante quanto os resultados.
+![Relação](slides/images/diagram.png)
+
+Nossos modelos lógicos também evoluiram ao longo do processo. Nesse sentido, inicialmente tinhamos o seguinte modelo
+
+~~~~
+Drug(__DrugId__, Name, Class)
+DrugAlias(__DrugAlias__, __DrugId__)
+
+Disease(__DiseaseId__, Name)
+DiseaseAlias(__DiseaseAlias__, DiseaseId)
+
+Interaction(__InteractionId__,
+               DrugId,
+               DiseaseId,
+               InteractionType)
+
+InteractionSrc(InteractionId,
+              TrustLevel,
+              Gene,
+              GeneDrugInteraction,
+              GeneDrugInteractionMechanism,
+              DrugDiseaseInteraction,
+              Source)
+~~~~
+
+Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar uma interação. Além disso, como podemos ver no modelo apresentado anteriormente no trabalho, alguns campos foram adicionados, como o Score da Interação.
+
+
+
 
 ## Perguntas de Pesquisa/Análise Combinadas e Respectivas Análises
 
 ### Perguntas/Análise com Resposta Implementada
 
+
 #### Pergunta/Análise 1
-
-Selecione o nome das drogas e doenças das N interações com maior pontuação.
-
-* Usando o SQL com 10 interações:
-
-```sql
-SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;
-```
-
-Resultado:
-
-| `Dr.Name` | `Di.Name` | `I.Type` | `I.Score` |
-|-----------|-----------|----------|-----------|
-|NITISINONE|Tyrosinemia, Type III|0|0.861673561599624|
-|BUROSUMAB|Autosomal dominant hypophosphatemic rickets|0|0.833348003403456|
-|NITISINONE|Hawkinsinuria|0|0.669172021242262|
-|BUROSUMAB|Hypophosphatemic Rickets|0|0.416674001701728|
-|BUROSUMAB|TUMORAL CALCINOSIS, HYPERPHOSPHATEMIC, FAMILIAL|0|0.416674001701728|
-|NITISINONE|Tyrosinemias|0|0.40333656074876|
-|GOLODIRSEN|Muscular Dystrophy, Duchenne|1|0.388903558959012|
-|GLEMBATUMUMAB VEDOTIN|Malignant neoplasm of breast|1|0.386666666666667|
-|UROFOLLITROPIN|Ovarian Hyperstimulation Syndrome|1|0.346659625033008|
-|THIAMINE|Dystonia|1|0.333339201361383|
-
+>
+>* Selecione o nome das drogas e doenças das N interações com maior pontuação.
+>
+>   * Usando o SQL com 10 interações:
+>
+>```sql
+>SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease  as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;
+>```
+>
+>Resultado:
+>
+>| `Dr.Name` | `Di.Name` | `I.Type` | `I.Score` |
+>|-----------|-----------|----------|-----------|
+>|NITISINONE|Tyrosinemia, Type III|0|0.861673561599624|
+>|BUROSUMAB|Autosomal dominant hypophosphatemic rickets|0|0.833348003403456|
+>|NITISINONE|Hawkinsinuria|0|0.669172021242262|
+>|BUROSUMAB|Hypophosphatemic Rickets|0|0.416674001701728|
+>|BUROSUMAB|TUMORAL CALCINOSIS, HYPERPHOSPHATEMIC, FAMILIAL|0|0.416674001701728|
+>|NITISINONE|Tyrosinemias|0|0.40333656074876|
+>|GOLODIRSEN|Muscular Dystrophy, Duchenne|1|0.388903558959012|
+>|GLEMBATUMUMAB VEDOTIN|Malignant neoplasm of breast|1|0.386666666666667|
+>|UROFOLLITROPIN|Ovarian Hyperstimulation Syndrome|1|0.346659625033008|
+>|THIAMINE|Dystonia|1|0.333339201361383|
+>
 #### Pergunta/Análise 2
 > * Pergunta 2
 >   
