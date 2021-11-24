@@ -27,3 +27,11 @@ Necessita que os dados TSV existam.
 Executar `tsv2sqlite` na pasta `src`.
 
 O arquivo fica disponível em `data/processed/sqlite`.
+
+### Neo4j
+
+Necessita que os dados TSV existam.
+
+Executar `tsv2neo4j` na pasta `src`.
+
+Para importar execute `import_neo4j`. Isso cria uma database chamada `dbx`.
