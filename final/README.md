@@ -120,7 +120,9 @@ Selecione o nome das drogas e doenças das N interações com maior pontuação.
 
 * Usando o SQL com 10 interações:
 
-`SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;`
+```sql
+SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;
+```
 
 Resultado:
 
