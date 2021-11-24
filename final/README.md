@@ -77,6 +77,7 @@ título da base | link | breve descrição
 > Apresente aqui detalhes do processo de construção do dataset e análise. Nesta seção ou na seção de Perguntas podem aparecer destaques de código como indicado a seguir. Note que foi usada uma técnica de highlight de código, que envolve colocar o nome da linguagem na abertura de um trecho com `~~~`, tal como `~~~python`.
 > Os destaques de código devem ser trechos pequenos de poucas linhas, que estejam diretamente ligados a alguma explicação. Não utilize trechos extensos de código. Se algum código funcionar online (tal como um Jupyter Notebook), aqui pode haver links. No caso do Jupyter, preferencialmente para o Binder abrindo diretamente o notebook em questão.
 
+
 ~~~python
 df = pd.read_excel("/content/drive/My Drive/Colab Notebooks/dataset.xlsx");
 sns.set(color_codes=True);
@@ -193,7 +194,7 @@ Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar um
 
 
 #### Pergunta/Análise 3
-> * Pergunta
+> * Quais Classes de Doenças estão mais relacionadas com a Droga Y?
 >   
 >   * Explicação sucinta da análise que será feita e conjunto de queries que
 >     responde à pergunta.
