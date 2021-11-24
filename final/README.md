@@ -7,7 +7,7 @@
 
 ## Resumo do Projeto
 
-Este projeto tem como objetivo estudar a relação entre drogas e doenças. Tal relação é dada por intermédio de genes em comum, ou seja, se uma droga A se relaciona com um gene Y, e este mesmo gene tem relação de causa com as doenças B e C, a droga A também tem relação com as doenças B e C. Para tal estudo, vamos utilizar 2 bases de dados: DgiDb (Banco de dados sobre interações droga-gene e o genoma drogável) e DisgeNet (pataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humana).
+Este projeto tem como objetivo estudar a relação entre drogas e doenças. Tal relação é dada por intermédio de genes em comum, ou seja, se uma droga A se relaciona com um gene Y, e este mesmo gene tem relação de causa com as doenças B e C, a droga A também tem relação com as doenças B e C. Para tal estudo, vamos utilizar 2 bases de dados: DGIDB (Banco de dados sobre interações droga-gene e o genoma drogável) e DisgeNet (pataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humana).
 
 ## Slides da Apresentação
 
@@ -55,22 +55,19 @@ Evidence(
 
 
 ## Dataset Publicado
-> Elencar os arquivos/bases preliminares dos datasets serão publicados.
 
 título do arquivo/base | link | breve descrição
 ----- | ----- | -----
-`<título do arquivo/base>` | `<link para arquivo/base>` | `<breve descrição do arquivo/base>`
-
-> Os arquivos finais do dataset publicado devem ser colocados na pasta `data`, em subpasta `processed`. Outros arquivos serão colocados em subpastas conforme seu papel (externo, interim, raw). A diferença entre externo e raw é que o raw é em formato não adaptado para uso. A pasta `raw` é opcional, pois pode ser substituída pelo link para a base original da seção anterior.
-> Coloque arquivos que não estejam disponíveis online e sejam acessados pelo notebook. Relacionais (usualmente CSV), XML, JSON e CSV ou triplas para grafos.
-> Este é o conjunto mínimo de informações que deve constar na disponibilização do Dataset, mas a equipe pode enriquecer esta seção.
+tsv | [tsv](data/processed/tsv) | Arquivos tabulares em formato TSV.
+sqlite | [sqlite](data/processed/sqlite) | Database SQLite.
+neo4j | [neo4j](data/processed/neo4j) | Arquivos CSV para importar em Neo4j.
 
 ## Bases de Dados
 
 título da base | link | breve descrição
 ----- | ----- | -----
-`DisgeNET` | [Link](https://www.disgenet.org/) | `Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas.`
-`DgiDb` | [Link](https://www.dgidb.org/ )| `O DgiDb possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.`
+DisgeNET | [Link](https://www.disgenet.org/) | Plataforma contendo uma das maiores coleções publicamente disponíveis de genes e variantes associados a doenças humanas.
+DGIDB | [Link](https://www.dgidb.org/ )| O DGIDB possui dados extraídos de mais de trinta fontes confiáveis sobre interações droga-gene e o genoma drogável.
 
 ## Detalhamento do Projeto
 
@@ -102,12 +99,12 @@ plt.show();
 ## Evolução do Projeto
 
 Diante do desafio de encontrar a relação entre Drogas/Fármacos e Doenças, tivemos como principal desafio lidar com uma grande quantidade de dados;
-Nossa primeira tentaiva de extração de dados das fontes foi através das APIs disponibilizadas pelas plataformas. Todavia, tanto o DisgeNET como o DgiDb contam com uma quantidade muito grande de registros em seus bancos de dados. Desse modo, as requisições HTTP feitas nas APIs acabavam ficando muito lentas. Para resolver tal problema tivemos duas opções: utilizar metodos assíncronos no python para aumentar o numero de requisições sendo feitas ao mesmo tempo, ou baixar diretamente os dados das plataformas (tipos TSV ou SQLite). Optamos pela segunda opção, que para o DisgeNET só foi possível no formato SQLite, pois o arquivo .TSV disponibilizado para download carecia de alguns dados necessários, como o Score.
+Nossa primeira tentaiva de extração de dados das fontes foi através das APIs disponibilizadas pelas plataformas. Todavia, tanto o DisgeNET como o DGIDB contam com uma quantidade muito grande de registros em seus bancos de dados. Desse modo, as requisições HTTP feitas nas APIs acabavam ficando muito lentas. Para resolver tal problema tivemos duas opções: utilizar metodos assíncronos no python para aumentar o numero de requisições sendo feitas ao mesmo tempo, ou baixar diretamente os dados das plataformas (tipos TSV ou SQLite). Optamos pela segunda opção, que para o DisgeNET só foi possível no formato SQLite, pois o arquivo .TSV disponibilizado para download carecia de alguns dados necessários, como o Score.
 
 Ademais, outro desafio encontrado foi a necessidade de classificar a confiabilidade de uma interação Droga/Doença;
 Nesse sentido, os dados coletados possuem níveis de confiabilidade variáveis, que foram levados em conta e tranformados em um Score. Todavia, nos dados (antes do processamento) havia um Score atrelado ao DgIdb (Score que qualificava a interação Droga/Gene) e outro ao DisGeNET (Score que qualificava a interação Doença/Gene). Assim, obtivemos um Score global da interação multiplicando um pelo outro.
 
-Alem disso, tivemos um problema relacionado aos tipos de interação Droga/Doença. No caso do DisgeNET, tinhamos 8 tipos de interação, e no caso do DgiDb tinhamos 18 tipos diferentes. Desse modo, precisamos classificar todas esses tipos de interação em apenas 2: ativação e inibição, como podemos ver na imagem abaixo.
+Alem disso, tivemos um problema relacionado aos tipos de interação Droga/Doença. No caso do DisgeNET, tinhamos 8 tipos de interação, e no caso do DGIDB tinhamos 18 tipos diferentes. Desse modo, precisamos classificar todas esses tipos de interação em apenas 2: ativação e inibição, como podemos ver na imagem abaixo.
 
 ![Relação](slides/images/diagram.png)
 
@@ -136,84 +133,60 @@ InteractionSrc(InteractionId,
 
 Este evoluiu para a a adiçao da entidade "Evidencia", que passa a qualificar uma interação. Além disso, como podemos ver no modelo apresentado anteriormente no trabalho, alguns campos foram adicionados, como o Score da Interação.
 
-
-
-
 ## Perguntas de Pesquisa/Análise Combinadas e Respectivas Análises
 
 ### Perguntas/Análise com Resposta Implementada
 
-
 #### Pergunta/Análise 1
->
->* Selecione o nome das drogas e doenças das N interações com maior pontuação.
->
->   * Usando o SQL com 10 interações:
->
->```sql
->SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease  as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;
->```
->
->Resultado:
->
->| `Dr.Name` | `Di.Name` | `I.Type` | `I.Score` |
->|-----------|-----------|----------|-----------|
->|NITISINONE|Tyrosinemia, Type III|0|0.861673561599624|
->|BUROSUMAB|Autosomal dominant hypophosphatemic rickets|0|0.833348003403456|
->|NITISINONE|Hawkinsinuria|0|0.669172021242262|
->|BUROSUMAB|Hypophosphatemic Rickets|0|0.416674001701728|
->|BUROSUMAB|TUMORAL CALCINOSIS, HYPERPHOSPHATEMIC, FAMILIAL|0|0.416674001701728|
->|NITISINONE|Tyrosinemias|0|0.40333656074876|
->|GOLODIRSEN|Muscular Dystrophy, Duchenne|1|0.388903558959012|
->|GLEMBATUMUMAB VEDOTIN|Malignant neoplasm of breast|1|0.386666666666667|
->|UROFOLLITROPIN|Ovarian Hyperstimulation Syndrome|1|0.346659625033008|
->|THIAMINE|Dystonia|1|0.333339201361383|
->
-#### Pergunta/Análise 2
-> * Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449 ?
->   
->   * Vamos selecionar os 10 primeiros registros com a seguinte query:
->```sql
->SELECT D.Id, D.Name  FROM INTERACTION as I, DRUG as D, Disease  as Di  WHERE Di.id ='C0023449'  LIMIT 10;
->```
->   Resultado:
->   
->| `Drug Id` | `Drug Name`  |
->|-----------|-----------|
->chembl:CHEMBL398707|HYDROMORPHONE
->chembl:CHEMBL3545253|FLORTAUCIPIR F 18
->chembl:CHEMBL2|PRAZOSIN
->chembl:CHEMBL1621597|IPRATROPIUM
->chembl:CHEMBL157101|KETOCONAZOLE
->chembl:CHEMBL1670|MITOTANE
->chembl:CHEMBL723|CARVEDILOL
->chembl:CHEMBL157138|LISURIDE
->chembl:CHEMBL2103830|FOSTAMATINIB
->chembl:CHEMBL1201250|BENZQUINAMIDE
 
+* Selecione o nome das drogas e doenças das N interações com maior pontuação.
 
+   * Usando o SQL com 10 interações:
 
-#### Pergunta/Análise 3
-> * Quais Classes de Doenças estão mais relacionadas com a Droga Y?
->   
->   * Explicação sucinta da análise que será feita e conjunto de queries que
->     responde à pergunta.
+```sql
+SELECT Dr.Name, Di.Name, I.Type, I.Score FROM Interaction as I, Drug as Dr, Disease  as Di WHERE Dr.Id = I.DrugId AND Di.Id = I.DiseaseId ORDER BY I.Score DESC LIMIT 10;
+```
 
-### Perguntas/Análise Propostas mas Não Implementadas
+Resultado:
 
-#### Pergunta/Análise 1
-> * Quais grupos de doença e de drogas estão mais relacionados entre si?
->   
->   * 
+| `Dr.Name` | `Di.Name` | `I.Type` | `I.Score` |
+|-----------|-----------|----------|-----------|
+|NITISINONE|Tyrosinemia, Type III|0|0.861673561599624|
+|BUROSUMAB|Autosomal dominant hypophosphatemic rickets|0|0.33348003403456|
+|NITISINONE|Hawkinsinuria|0|0.669172021242262|
+|BUROSUMAB|Hypophosphatemic Rickets|0|0.416674001701728|
+|BUROSUMAB|TUMORAL CALCINOSIS, HYPERPHOSPHATEMIC, FAMILIAL|0|0.16674001701728|
+|NITISINONE|Tyrosinemias|0|0.40333656074876|
+|GOLODIRSEN|Muscular Dystrophy, Duchenne|1|0.388903558959012|
+|GLEMBATUMUMAB VEDOTIN|Malignant neoplasm of breast|1|0.386666666666667|
+|UROFOLLITROPIN|Ovarian Hyperstimulation Syndrome|1|0.346659625033008|
+|THIAMINE|Dystonia|1|0.333339201361383|
 
 #### Pergunta/Análise 2
-> * Pergunta 2
->   
->   * Explicação em linhas gerais de como a base pode ser usada para responder esta pergunta e a sua relevância.
+
+* Quais drogas tem relação com a doença (Acute lymphocytic leukemia) C0023449 ?
+   
+    * Vamos selecionar os 10 primeiros registros com a seguinte query:
+```sql
+SELECT D.Id, D.Name  FROM INTERACTION as I, DRUG as D, Disease  as Di  WHERE Di.id ='C0023449'  LIMIT 10;
+```
+   Resultado:
+   
+| `Drug Id` | `Drug Name`  |
+|-----------|-----------|
+chembl:CHEMBL398707|HYDROMORPHONE
+chembl:CHEMBL3545253|FLORTAUCIPIR F 18
+chembl:CHEMBL2|PRAZOSIN
+chembl:CHEMBL1621597|IPRATROPIUM
+chembl:CHEMBL157101|KETOCONAZOLE
+chembl:CHEMBL1670|MITOTANE
+chembl:CHEMBL723|CARVEDILOL
+chembl:CHEMBL157138|LISURIDE
+chembl:CHEMBL2103830|FOSTAMATINIB
+chembl:CHEMBL1201250|BENZQUINAMIDE
 
 #### Pergunta/Análise 3
-> * Pergunta 3
->   
->   * Explicação em linhas gerais de como a base pode ser usada para responder esta pergunta e a sua relevância.
+* Quais Classes de Doenças estão mais relacionadas com a Droga Y?
 
-> [Notebook](src/notebooks/queries.ipynb)
+   * Explicação sucinta da análise que será feita e conjunto de queries que
+     responde à pergunta.
